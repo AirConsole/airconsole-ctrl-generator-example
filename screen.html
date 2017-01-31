@@ -1,0 +1,68 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta content='width=device-width, initial-scale=1, maximum-scale=1 user-scalable=0' name='viewport'>
+  <title>AirConsole Controller</title>
+  <link href='https://fonts.googleapis.com/css?family=Play:400,700' rel='stylesheet' type='text/css'>
+  <!-- AirConsole-Controls -->
+  <link rel="stylesheet" type="text/css" href="airconsole-controls/button/button.css">
+  <link rel="stylesheet" type="text/css" href="airconsole-controls/dpad/dpad.css">
+  <!-- Styles -->
+  <style type="text/css">
+    body {
+      background: #FFFFFF;
+      color: #000000;
+      font-size: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Example Project for the AirConsole Controller Generator V2</h1>
+
+  <button id="show_view_0">Show View-0</button>
+  <button id="show_view_1">Show View-1</button>
+
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+  <script type="text/javascript" src="https://www.airconsole.com/api/airconsole-latest.js"></script>
+  <script type="text/javascript">
+    var touch_enabled = "ontouchstart" in document.createElement("div");
+    var event_down = touch_enabled ? 'touchstart' : 'mousedown';
+    var event_up = touch_enabled ? 'touchend' : 'mouseup';
+    var airconsole = new AirConsole();
+
+    airconsole.onReady = function() {};
+
+    airconsole.onMessage = function(device_id, data) {
+      console.log(data);
+    };
+
+    airconsole.onConnect = function(device_id) {
+      this.setActivePlayers();
+      var player_number = this.convertDeviceIdToPlayerNumber(device_id);
+      // Set container css class as soon as a device connects
+      airconsole.message(device_id, {
+        container_class: 'player-' + player_number
+      });
+    };
+
+    // ------------------------------
+    // Change view on all controllers
+
+    // To view-1
+    $('#show_view_1').on(event_down, function() {
+      airconsole.broadcast({
+        show_view_id: 'view-1'
+      });
+    });
+
+    // To view-0
+    $('#show_view_0').on(event_down, function() {
+      airconsole.broadcast({
+        show_view_id: 'view-0'
+      });
+    });
+
+  </script>
+</body>
+</html>
